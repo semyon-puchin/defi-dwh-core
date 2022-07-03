@@ -1,0 +1,73 @@
+@startuml
+
+'HUBS
+entity h_addresses {
+    h_address_id = Column(Integer, primary_key=True)
+    ---
+    h_address = Column(Text, unique=True, nullable=False)
+
+    h_address_load_ts = Column(DateTime, nullable=False)
+}
+
+entity h_chains {
+    h_chain_id = Column(Integer, primary_key=True)
+    ---
+    h_network = Column(Text, unique=True, nullable=False)
+    h_network_id = Column(Integer, unique=True, nullable=False)
+
+    h_chain_load_ts = Column(DateTime, nullable=False)
+}
+
+entity h_protocols {
+    h_protocol_id = Column(Integer, primary_key=True)
+    ---
+    h_protocol_name = Column(Text, unique=True, nullable=False)
+    h_protocol_type = Column(Enum(ProtocolType), nullable=False)
+
+    h_protocol_load_ts = Column(DateTime, nullable=False)
+}
+
+'LINKS
+entity l_chains_protocols {
+    l_chain_protocol_id = Column(Integer, primary_key=True)
+    ---
+    h_chain_id = Column(Integer, ForeignKey('h_chains.h_chain_id'), nullable=False)
+    h_protocol_id = Column(Integer, ForeignKey('h_protocols.h_protocol_id'), nullable=False)
+}
+
+entity l_addresses_chains {
+    l_address_chain_id = Column(Integer, primary_key=True)
+    ---
+    h_address_id = Column(Integer, ForeignKey('h_addresses.h_address_id'), nullable=False)
+    h_chain_id = Column(Integer, ForeignKey('h_chains.h_chain_id'), nullable=False)
+}
+
+'SATELLITES
+entity s_wallets {
+    s_wallet_id = Column(Integer, primary_key=True)
+    h_address_id = Column(Integer, ForeignKey('h_addresses.h_address_id'), nullable=False)
+    ---
+    s_wallet_label = Column(Text, unique=True, nullable=False)
+    s_wallet_notional = Column(Text, nullable=False)
+}
+
+entity s_pools {
+    s_pool_id = Column(Integer, primary_key=True)
+    h_address_id = Column(Integer, ForeignKey('h_addresses.h_address_id'), nullable=False)
+    ---
+    s_pool_label = Column(Text, nullable=False)
+    s_revenue_type = Column(Enum(RevenueType), nullable=False)
+    s_is_impermanent_loss = Column(Boolean, nullable=False)
+}
+
+l_addresses_chains <|-- h_addresses: O-M
+l_addresses_chains <|-- h_chains: O-M
+
+l_chains_protocols <|-- h_chains: O-M
+l_chains_protocols <|-- h_protocols: O-M
+
+h_addresses <|-- s_wallets: O-O
+h_addresses <|-- s_pools: O-O
+
+
+@enduml
