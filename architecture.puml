@@ -60,7 +60,7 @@ entity l_addresses_pools {
 }
 
 entity l_chains_protocols_pools_addresses {
-    l_address_chain_protocol_pool_id = Column(Integer, primary_key=True)
+    l_chain_protocol_pool_address_id = Column(Integer, primary_key=True)
     ---
     l_address_chain_id = Column(Integer, ForeignKey('l_addresses_chains.l_address_chain_id'), nullable=False)
     l_address_pool_id = Column(Integer, ForeignKey('l_addresses_pools.l_address_pool_id'), nullable=False)
