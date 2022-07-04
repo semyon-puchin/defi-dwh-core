@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, ForeignKey
 
-from main import Base
+from orm.models.main import Base
 
 
 class LinkAddressesPools(Base):

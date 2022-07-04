@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, Text, DateTime
-from sqlalchemy.orm import relationship
 
-from main import Base
+from orm.models.main import Base
 
 
 class HubAddresses(Base):

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, Text, ForeignKey
 
-from main import Base
+from orm.models.main import Base
 
 
 class SatelliteWallets(Base):

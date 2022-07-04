@@ -1,5 +1,5 @@
 from cfg.engine import db_engine
-from main import Base
+from orm.models.main import Base
 
 
 if __name__ == '__main__':

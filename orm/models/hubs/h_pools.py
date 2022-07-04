@@ -1,8 +1,7 @@
-from enum import Enum
-from sqlalchemy import Column, Integer, Text, Boolean, DateTime
+from sqlalchemy import Column, Integer, Text, Boolean, DateTime, Enum
 
 from orm.consts.revenue_type import RevenueType
-from main import Base
+from orm.models.main import Base
 
 
 class HubPools(Base):

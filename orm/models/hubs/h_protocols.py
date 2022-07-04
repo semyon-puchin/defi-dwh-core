@@ -1,8 +1,7 @@
-from enum import Enum
-from sqlalchemy import Column, Integer, Text, DateTime
+from sqlalchemy import Column, Integer, Text, DateTime, Enum
 
 from orm.consts.protocol_type import ProtocolType
-from main import Base
+from orm.models.main import Base
 
 
 class HubProtocols(Base):
