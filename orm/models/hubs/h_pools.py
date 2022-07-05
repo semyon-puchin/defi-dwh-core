@@ -11,7 +11,7 @@ class HubPools(Base):
     h_pool_id = Column(Integer, primary_key=True)
     # ---
     h_pool_label = Column(Text, nullable=False)
-    h_revenue_type = Column(Enum(RevenueType), nullable=False)
+    h_pool_revenue_type = Column(Enum(RevenueType), nullable=False)
     h_is_impermanent_loss = Column(Boolean, nullable=False)
 
     h_pool_load_ts = Column(DateTime, nullable=False)

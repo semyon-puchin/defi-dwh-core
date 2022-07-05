@@ -9,3 +9,6 @@ from orm.models.links.l_addresses_pools import LinkAddressesPools
 from orm.models.links.l_chains_protocols_pools_addresses import LinkChainsProtocolsPoolsAddresses
 
 from orm.models.sats.h_addresses.s_wallets import SatelliteWallets
+from orm.models.sats.h_addresses.s_abis import SatelliteAbis
+from orm.models.sats.h_addresses.s_additional_addresses import SatelliteAdditionalAddresses
+from orm.models.sats.h_addresses.s_tokens import SatelliteTokens
