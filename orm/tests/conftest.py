@@ -1,5 +1,5 @@
 import pytest
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, distinct
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, drop_database, create_database
 
@@ -104,13 +104,13 @@ def h_addresses(session):
         'DAIUSDC_balancer_eth_address',
         'DAIUSDT_cake_bsc_address',
         'USDC_eth_address',
-        'USDC_bsc_address'
+        'USDC_bsc_address',
         'USDT_eth_address',
         'USDT_bsc_address',
         'USDT_opt_address',
         'DAI_eth_address',
         'DAI_opt_address',
-        'DAI_bsc_address'
+        'DAI_bsc_address',
         'FRAX_eth_address',
         'HASH_USD_bsc_address',
         'HASH_USD_eth_address',
@@ -229,11 +229,13 @@ def l_addresses_abis_chains(session, l_addresses_chains):
                     l_address_chain_id=l_address_chain[0].l_address_chain_id,
                     h_abi_id=h_abi.h_abi_id
                 )
+
                 session.add(l_address_abi_chain)
                 session.commit()
 
             # tokens
-            elif h_address[:-12].lower() not in ('hash_usd', 'fund_defi') and h_abi.h_abi_list == 'ERC20_abi':
+            elif h_address[:-12].lower() not in ('hash_usd', 'fund_defi') and \
+                    h_abi.h_abi_list == 'ERC20_abi' and len(h_address) < 20:
                 l_address_abi_chain = orm.models.LinkAddressesAbisChains(
                     l_address_chain_id=l_address_chain[0].l_address_chain_id,
                     h_abi_id=h_abi.h_abi_id
@@ -322,23 +324,36 @@ def l_addresses_abis_tokens_protocols_chains(
         l_addresses_abis_tokens_chains,
         l_addresses_abis_chains
 ):
+    hash_table = dict()
 
     for l_protocol_chain in l_protocols_chains:
         h_protocol_name = l_protocol_chain[1].h_protocol_name
         h_network_name = l_protocol_chain[2].h_network_name
+
+        if h_network_name not in hash_table:
+            hash_table[h_network_name] = dict()
+        if h_protocol_name not in hash_table[h_network_name]:
+            hash_table[h_network_name][h_protocol_name] = dict()
+
         for l_address_abi_token_chain in l_addresses_abis_tokens_chains:
             h_token_symbol = l_address_abi_token_chain[1].h_token_symbol
             for l_address_abi_chain in l_addresses_abis_chains:
                 h_address = l_address_abi_chain[3].h_address
-
                 if h_protocol_name in h_address and h_network_name in h_address and h_token_symbol in h_address:
-                    l_address_abi_token_protocol_chain = orm.models.LinkAddressesAbisTokensProtocolsChains(
-                        l_protocol_chain_id=l_protocol_chain[0].l_protocol_chain_id,
-                        l_address_abi_chain_id=l_address_abi_chain[0].l_address_abi_chain_id,
-                        l_address_abi_token_chain_id=l_address_abi_token_chain[0].l_address_abi_token_chain_id
-                    )
-                    session.add(l_address_abi_token_protocol_chain)
-                    session.commit()
+
+                    if h_address not in hash_table[h_network_name][h_protocol_name]:
+                        hash_table[h_network_name][h_protocol_name][h_address] = list()
+                    if h_token_symbol not in hash_table[h_network_name][h_protocol_name][h_address]:
+                        hash_table[h_network_name][h_protocol_name][h_address].append(h_token_symbol)
+
+                        l_address_abi_token_protocol_chain = orm.models.LinkAddressesAbisTokensProtocolsChains(
+                            l_protocol_chain_id=l_protocol_chain[0].l_protocol_chain_id,
+                            l_address_abi_chain_id=l_address_abi_chain[0].l_address_abi_chain_id,
+                            l_address_abi_token_chain_id=l_address_abi_token_chain[0].l_address_abi_token_chain_id
+                        )
+
+                        session.add(l_address_abi_token_protocol_chain)
+                        session.commit()
 
     xcom = session.query(
         orm.models.LinkAddressesAbisTokensProtocolsChains
@@ -346,6 +361,7 @@ def l_addresses_abis_tokens_protocols_chains(
     return xcom
 
 
+# TODO
 @pytest.mark.order(15)
 @pytest.fixture(scope='class', autouse=True)
 def l_addresses_abis_tokens_protocols_labels_chains(
