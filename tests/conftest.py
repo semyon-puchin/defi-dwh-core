@@ -1,5 +1,5 @@
 import pytest
-from sqlalchemy import create_engine, distinct
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, drop_database, create_database
 
@@ -361,7 +361,6 @@ def l_addresses_abis_tokens_protocols_chains(
     return xcom
 
 
-# TODO
 @pytest.mark.order(15)
 @pytest.fixture(scope='class', autouse=True)
 def l_addresses_abis_tokens_protocols_labels_chains(
