@@ -1,4 +1,4 @@
-from tests.apeirons.placements.apeiron import FIXTURES
+from tests._apeirons.placements.apeiron import FIXTURES
 from orm.models import *
 
 import pytest
