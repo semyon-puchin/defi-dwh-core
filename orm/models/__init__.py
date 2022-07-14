@@ -17,4 +17,4 @@ from orm.models.links.l_addresses_abis_tokens_protocols_labels_chains import Lin
 from orm.models.links.l_supp_addresses_abis_tokens_protocols_chains import LinkSupportAddressesAbisTokensProtocolsChains
 
 from orm.models.sats.l_addresses_abis_tokens_protocols_chains.s_addresses_abis_tokens_protocols_chains import SatelliteAddressesAbisTokensProtocolsChains
-
+from orm.models.sats.h_supp_addresses.s_supp_addresses import SatelliteSupportAddresses
